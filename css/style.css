@@ -1,0 +1,322 @@
+/* ============================================================
+   BI Viário SEAT · Natal/RN — Estilos
+   ============================================================ */
+
+/* ── RESET & VARIÁVEIS ───────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#06111d;--bg2:#0b1929;--bg3:#101f30;--card:#0d1c2d;--card2:#121f30;
+  --blue:#00d4ff;--blue2:#0ea5e9;--teal:#06d6b0;--green:#22d3a5;
+  --text:#dde8f5;--muted:#5f8aaa;--border:#1a3050;
+  --red:#f43f5e;--amber:#fbbf24;--purple:#a78bfa;
+  --sidebar:230px;
+  --map-bg:#061526;
+}
+
+/* ── TEMA CLARO ──────────────────────────────────────────── */
+html.light{
+  --bg:#f0f4f8;--bg2:#e2eaf2;--bg3:#d4dfe9;--card:#ffffff;--card2:#f7fafc;
+  --blue:#0077aa;--blue2:#0ea5e9;--teal:#059669;--green:#16a34a;
+  --text:#1a2e42;--muted:#5a7a96;--border:#b8cfe0;
+  --red:#e11d48;--amber:#d97706;--purple:#7c3aed;
+  --map-bg:#dce9f5;
+}
+
+/* ── BASE ────────────────────────────────────────────────── */
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text)}
+#app{display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+#sidebar{
+  width:var(--sidebar);flex-shrink:0;background:var(--bg2);
+  border-right:1px solid var(--border);display:flex;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+  position:relative;transition:width .25s ease,padding .25s ease,margin-left .25s ease;
+}
+#sb-collapse-btn{
+  position:absolute;top:10px;right:8px;z-index:5;
+  background:var(--bg3);border:1px solid var(--border);color:var(--muted);
+  border-radius:5px;width:22px;height:22px;font-size:11px;cursor:pointer;line-height:1;
+}
+#sb-collapse-btn:hover{border-color:var(--blue2);color:var(--blue2)}
+#sb-expand-btn{
+  display:none;position:fixed;top:12px;left:12px;z-index:60;
+  background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  border-radius:7px;width:34px;height:34px;font-size:15px;cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+#sb-overlay{display:none}
+
+/* Sidebar recolhida: oculta conteúdo, encolhe largura a zero */
+#app.sb-collapsed #sidebar{width:0;border-right:none;overflow:hidden}
+#app.sb-collapsed #sidebar > *{opacity:0;pointer-events:none}
+#app.sb-collapsed #sb-expand-btn{display:flex;align-items:center;justify-content:center}
+
+.sb-logo{padding:14px 36px 10px 14px;border-bottom:1px solid var(--border)}
+.sb-logo img{width:100%;border-radius:8px;display:block}
+.sb-sec{font-size:9px;font-family:'Syne',sans-serif;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);padding:12px 14px 5px;font-weight:700}
+.sb-flt{padding:3px 10px 3px;position:relative}
+.sb-flt label{font-size:10px;color:var(--muted);display:block;margin-bottom:2px}
+.chips-wrap{padding:6px 10px;display:flex;flex-wrap:wrap;gap:3px;min-height:0}
+.chip{background:#0ea5e920;color:var(--blue2);border:1px solid #0ea5e940;border-radius:20px;
+  font-size:9px;padding:2px 7px;cursor:pointer;display:flex;align-items:center;gap:3px;max-width:200px;overflow:hidden}
+.chip:hover{background:#f43f5e20;border-color:#f43f5e60;color:var(--red)}
+.btn-sb{margin:3px 10px;background:transparent;border:1px solid var(--border);color:var(--muted);
+  border-radius:5px;padding:5px;font-size:10px;cursor:pointer;width:calc(100% - 20px);font-family:'DM Sans',sans-serif}
+.btn-sb:hover{border-color:var(--red);color:var(--red)}
+.btn-upload{border-color:var(--blue2)!important;color:var(--blue2)!important}
+.btn-upload:hover{border-color:var(--blue)!important;color:var(--blue)!important}
+
+/* ── DROPDOWN MULTI-SELECT (checkboxes) ──────────────────── */
+.ms-wrap{position:relative;width:100%}
+.ms-trigger{
+  width:100%;background:var(--bg3);color:var(--text);border:1px solid var(--border);
+  border-radius:5px;padding:4px 7px;font-size:11px;cursor:pointer;outline:none;
+  font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:space-between;gap:4px;
+}
+.ms-trigger:hover,.ms-trigger:focus{border-color:var(--blue)}
+.ms-trigger-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;flex:1}
+.ms-trigger-arrow{font-size:9px;color:var(--muted);flex-shrink:0}
+.ms-panel{
+  display:none;position:absolute;top:calc(100% + 3px);left:0;width:min(260px,80vw);
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);z-index:80;overflow:hidden;
+}
+.ms-panel.open{display:block}
+.ms-panel-actions{
+  display:flex;gap:6px;padding:7px 8px;border-bottom:1px solid var(--border);background:var(--bg3);
+}
+.ms-panel-actions button{
+  flex:1;background:transparent;border:1px solid var(--border);color:var(--muted);
+  border-radius:4px;padding:3px 4px;font-size:9px;cursor:pointer;font-family:'DM Sans',sans-serif;
+}
+.ms-panel-actions button:hover{border-color:var(--blue2);color:var(--blue2)}
+.ms-options{max-height:220px;overflow-y:auto;padding:4px 0;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.ms-opt{display:flex;align-items:center;gap:7px;padding:5px 10px;font-size:11px;cursor:pointer;color:var(--text)}
+.ms-opt:hover{background:var(--bg3)}
+.ms-opt input{accent-color:var(--blue2);cursor:pointer;flex-shrink:0}
+.ms-opt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── MAIN ────────────────────────────────────────────────── */
+#main{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:11px 18px;
+  display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50}
+.topbar-brand h1{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--blue);letter-spacing:.3px}
+.topbar-brand p{font-size:10px;color:var(--muted);margin-top:1px}
+#status{font-size:10px;color:var(--muted);background:var(--bg3);padding:3px 9px;border-radius:20px;
+  border:1px solid var(--border);margin-left:auto;white-space:nowrap}
+.content{padding:12px 16px 40px}
+
+/* ── KPIs ────────────────────────────────────────────────── */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px 14px;
+  position:relative;overflow:hidden;border-top:2px solid var(--ac);cursor:pointer;transition:box-shadow .15s,border-color .15s}
+.kpi:hover{box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.kpi.open{box-shadow:0 4px 16px rgba(0,0,0,.28)}
+.kpi .lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;
+  font-family:'Syne',sans-serif;font-weight:600}
+.kpi .val{font-size:22px;font-weight:700;line-height:1;color:var(--ac);font-family:'Syne',sans-serif}
+.kpi .sub{font-size:10px;color:var(--muted);margin-top:2px}
+.k1{--ac:var(--blue)}.k2{--ac:var(--amber)}.k3{--ac:var(--green)}.k4{--ac:var(--red)}
+
+.kpi-detail{
+  max-height:0;overflow:hidden;transition:max-height .25s ease,margin-top .25s ease;
+}
+.kpi.open .kpi-detail{max-height:260px;margin-top:10px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.kpi-row{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:10px}
+.kpi-row-year{width:34px;flex-shrink:0;color:var(--muted);font-family:'Syne',sans-serif;font-weight:700}
+.kpi-row-bar-wrap{flex:1;height:6px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.kpi-row-bar{display:block;height:100%;background:var(--ac);border-radius:4px}
+.kpi-row-val{width:42px;flex-shrink:0;text-align:right;color:var(--text);font-weight:600}
+.kpi-row-empty{font-size:10px;color:var(--muted);padding:6px 0}
+
+/* ── SEÇÕES / GRIDS / CARDS ──────────────────────────────── */
+.sec{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--muted);padding:10px 0 5px;border-bottom:1px solid var(--border);margin-bottom:9px;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px}
+.card h3{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px}
+.hint{font-size:9px;color:var(--muted);margin-bottom:7px}
+canvas{cursor:pointer}
+
+/* ── MAPA LEGACY (tab único) ─────────────────────────────── */
+.map-tabs{display:flex;gap:5px;margin-bottom:7px}
+.mtab{background:var(--bg3);border:1px solid var(--border);color:var(--muted);border-radius:5px;
+  padding:5px 12px;font-size:10px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.5px}
+.mtab.on{background:var(--blue2);border-color:var(--blue2);color:#fff}
+#lmap{width:100%;height:100%}
+
+/* ── LANDING ─────────────────────────────────────────────── */
+#land{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999}
+.land-box{text-align:center;padding:36px 40px;background:var(--bg2);border:1px solid var(--border);border-radius:16px;max-width:460px}
+.land-box img{width:130px;border-radius:10px;margin-bottom:18px}
+.land-box h2{font-family:'Syne',sans-serif;font-size:18px;color:var(--blue);margin-bottom:8px}
+.land-box p{color:var(--muted);font-size:12px;margin-bottom:22px;line-height:1.6}
+.land-box code{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:11px;color:var(--blue2)}
+.land-btn{background:var(--blue2);color:#fff;border:none;border-radius:8px;padding:11px 28px;
+  font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;transition:.2s}
+.land-btn:hover{background:var(--blue)}
+.spin{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--blue);
+  border-radius:50%;animation:sp .7s linear infinite;margin:0 auto 14px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ── MAP CARDS (3 mapas) ─────────────────────────────────── */
+.map-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;display:flex;flex-direction:column;
+}
+.map-card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px 6px;gap:8px;flex-wrap:wrap;
+}
+.map-card-header h3{
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  color:var(--text);margin:0;white-space:nowrap;
+}
+.map-card-controls{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.map-mode-btns{display:flex;gap:3px}
+.mmbtn{
+  background:var(--bg3);border:1px solid var(--border);color:var(--muted);
+  border-radius:5px;padding:3px 9px;font-size:10px;cursor:pointer;
+  font-family:'Syne',sans-serif;font-weight:600;transition:.15s;white-space:nowrap;
+}
+.mmbtn.active,.mmbtn:hover{background:var(--blue2);border-color:var(--blue2);color:#fff}
+.map-fullscreen-btn{
+  background:var(--bg3);border:1px solid var(--border);color:var(--muted);
+  border-radius:5px;padding:3px 8px;font-size:13px;cursor:pointer;
+  transition:.15s;line-height:1;flex-shrink:0;
+}
+.map-fullscreen-btn:hover{border-color:var(--blue);color:var(--blue)}
+.map-wrap{width:100%;height:300px;min-height:300px;flex:1}
+.map-wrap .leaflet-container{background:var(--map-bg)!important}
+.map-footer{
+  font-size:9px;color:var(--muted);padding:4px 12px 7px;
+  border-top:1px solid var(--border);text-align:right;
+}
+
+/* ── BOTÃO TEMA ──────────────────────────────────────────── */
+#theme-toggle{
+  background:var(--bg3);border:1px solid var(--border);color:var(--muted);
+  border-radius:20px;padding:4px 12px;font-size:11px;cursor:pointer;
+  font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.3px;
+  transition:background .2s,color .2s,border-color .2s;
+  display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0;
+}
+#theme-toggle:hover{border-color:var(--blue2);color:var(--blue2)}
+
+/* Leaflet no tema claro */
+html.light .leaflet-control-zoom a{background:var(--card);color:var(--text);border-color:var(--border)}
+html.light .leaflet-control-zoom a:hover{background:var(--bg3)}
+
+/* ── BOTÕES TIPO DE MAPA (Rua / Satélite) ────────────────── */
+.mtbtn{
+  background:var(--bg3);border:1px solid var(--border);color:var(--muted);
+  border-radius:5px;padding:3px 8px;font-size:10px;cursor:pointer;
+  font-family:'Syne',sans-serif;font-weight:600;transition:.15s;white-space:nowrap;
+}
+.mtbtn.active,.mtbtn:hover{background:var(--teal);border-color:var(--teal);color:#fff}
+
+/* ── PAINEL STREET VIEW ──────────────────────────────────── */
+.map-wrap{position:relative}
+.sv-panel{
+  display:none;position:absolute;inset:0;z-index:10;
+  border-radius:inherit;overflow:hidden;
+  background:var(--bg3);
+  align-items:center;justify-content:center;
+}
+#fs-map{position:relative}
+#fs-streetview{
+  display:none;position:absolute;inset:0;z-index:10;
+  background:var(--bg3);
+  align-items:center;justify-content:center;
+}
+.sv-msg{
+  text-align:center;color:var(--text);font-size:12px;line-height:1.7;
+  padding:24px 28px;background:var(--card);border:1px solid var(--border);
+  border-radius:10px;max-width:340px;
+}
+.sv-msg code{background:var(--bg3);border:1px solid var(--border);border-radius:4px;
+  padding:1px 5px;font-size:11px;color:var(--blue2)}
+
+/* ── MODAL FULLSCREEN ────────────────────────────────────── */
+#fs-modal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);
+  z-index:9999;align-items:center;justify-content:center;
+}
+#fs-modal.open{display:flex}
+#fs-inner{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  width:95vw;height:92vh;display:flex;flex-direction:column;overflow:hidden;
+  position:relative;
+}
+.fs-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;gap:8px;
+}
+#fs-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--blue)}
+.fs-close{
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  border-radius:5px;padding:4px 10px;cursor:pointer;font-size:13px;transition:.15s;
+}
+.fs-close:hover{border-color:var(--red);color:var(--red)}
+#fs-map{flex:1;width:100%}
+#fs-map .leaflet-container{background:var(--map-bg)!important}
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+/* ── Tablets / telas médias (≤1100px): reduz grades de 3/4 colunas ── */
+@media (max-width: 1100px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .grid3{grid-template-columns:1fr 1fr}
+  .grid4{grid-template-columns:1fr 1fr}
+  #maps-grid.grid3{grid-template-columns:1fr 1fr}
+}
+
+/* ── Tablets pequenos / mobile (≤860px): sidebar vira off-canvas ── */
+@media (max-width: 860px){
+  #sidebar{
+    position:fixed;top:0;left:0;height:100vh;z-index:70;
+    box-shadow:0 0 24px rgba(0,0,0,.4);
+  }
+  #app.sb-collapsed #sidebar{width:var(--sidebar)} /* off-canvas: largura mantida, sai da tela via transform */
+  #sidebar{transform:translateX(0);transition:transform .25s ease}
+  #app.sb-collapsed #sidebar{transform:translateX(-100%)}
+  #app.sb-collapsed #sidebar > *{opacity:1;pointer-events:auto} /* conteúdo permanece visível, só a posição muda */
+  #app:not(.sb-collapsed) #sb-overlay{
+    display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:65;
+  }
+  #app:not(.sb-collapsed) #sb-expand-btn{display:none}
+  #app.sb-collapsed #sb-expand-btn{display:flex}
+  #main{width:100%}
+  #sb-collapse-btn{display:flex;align-items:center;justify-content:center}
+}
+
+/* ── Mobile (≤700px): tudo em 1 coluna ───────────────────── */
+@media (max-width: 700px){
+  .kpis{grid-template-columns:1fr 1fr;gap:6px}
+  .grid2,.grid3,.grid4,#maps-grid.grid3{grid-template-columns:1fr}
+  .content{padding:10px 10px 32px}
+  .topbar{padding:9px 12px;flex-wrap:wrap}
+  .topbar-brand h1{font-size:12px}
+  .topbar-brand p{font-size:9px}
+  #status{font-size:9px;margin-left:0}
+  #theme-toggle{font-size:10px;padding:3px 9px}
+  .kpi .val{font-size:18px}
+  .map-card-header{flex-direction:column;align-items:flex-start}
+  .map-wrap{height:240px;min-height:240px}
+  #fs-inner{width:100vw;height:100vh;border-radius:0}
+  .ms-panel{width:min(280px,86vw)}
+  #sidebar{width:80vw;max-width:300px}
+  #app.sb-collapsed #sidebar{width:80vw;max-width:300px}
+}
+
+/* ── Telas muito pequenas (≤420px) ───────────────────────── */
+@media (max-width: 420px){
+  .kpis{grid-template-columns:1fr}
+}
