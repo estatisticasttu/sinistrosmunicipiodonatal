@@ -7,16 +7,16 @@
 let DARK_MODE = true;
 
 function toggleTheme(){
-  DARK_MODE = !DARK_MODE;
+  LIGHT_MODE = !LIGHT_MODE;
   const html = document.documentElement;
   const btn  = document.getElementById('theme-toggle');
 
-  if(DARK_MODE){
-    html.classList.remove('light');
-    btn.textContent = '🌙 Escuro';
-  } else {
-    html.classList.add('light');
+  if(LIGHT_MODE){
+    html.classList.remove('dark');
     btn.textContent = '☀️ Claro';
+  } else {
+    html.classList.add('dark');
+    btn.textContent = '🌙 Escuro';
   }
 
   /* URL determinada APÓS a classe já ter sido aplicada acima,
