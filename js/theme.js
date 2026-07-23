@@ -4,7 +4,7 @@
 
 /* eslint-disable no-unused-vars */
 
-let DARK_MODE = true;
+let LIGHT_MODE = true;
 
 function toggleTheme(){
   LIGHT_MODE = !LIGHT_MODE;
