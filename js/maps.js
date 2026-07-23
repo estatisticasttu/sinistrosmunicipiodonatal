@@ -24,7 +24,7 @@ const SATELLITE_URL = 'https://server.arcgisonline.com/ArcGIS/rest/services/Worl
 const SATELLITE_ATT = 'Tiles © Esri — Maxar, Earthstar Geographics';
 
 function getStreetUrl(){
-  return document.documentElement.classList.contains('light')
+  return document.documentElement.classList.contains('dark')
     ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
     : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
 }
@@ -90,7 +90,7 @@ function drawMap(st, coords, cfg, mode){
   if(mode === 'heat'){
     st.heatLayer = L.heatLayer(
       coords.map(([a,b])=>[a,b,0.55]),
-      { radius:cfg.radius, blur:cfg.blur||16, maxZoom:17, max:1.0, minOpacity:0.2, gradient:cfg.gradient }
+      { radius:cfg.radius, blur:cfg.blur||16, maxZoom:19, max:1.0, minOpacity:0.2, gradient:cfg.gradient }
     ).addTo(st.map);
   } else {
     const group = L.layerGroup();
