@@ -19,17 +19,11 @@ function toggleTheme(){
     btn.textContent = '🌙 Escuro';
   }
 
-  /* URL determinada APÓS a classe já ter sido aplicada acima,
-     usando DARK_MODE (não classList.contains) para evitar
-     qualquer timing race com a renderização do DOM. */
-  const newUrl = DARK_MODE
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-
-  /* Troca tile apenas nos mapas que estão no modo "rua" (não satélite) */
+  /* Troca tile layer de todos os mapas abertos */
+  const newUrl    = getTileUrl();
   const allStates = [MAP_STATE.all, MAP_STATE.ferido, MAP_STATE.obito, FS_STATE];
   allStates.forEach(st=>{
-    if(st.map && st.tileLayer && st.mapType !== 'satellite'){
+    if(st.map && st.tileLayer){
       st.map.removeLayer(st.tileLayer);
       st.tileLayer = L.tileLayer(newUrl, { attribution:'© OSM © CARTO', maxZoom:19 }).addTo(st.map);
     }
