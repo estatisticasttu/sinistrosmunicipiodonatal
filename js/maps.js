@@ -25,8 +25,8 @@ const SATELLITE_ATT = 'Tiles © Esri — Maxar, Earthstar Geographics';
 
 function getStreetUrl(){
   return document.documentElement.classList.contains('dark')
-    ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
 }
 
 /* Alias mantido para theme.js */
